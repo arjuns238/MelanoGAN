@@ -6,7 +6,7 @@ Melanoma, a form of skin cancer, arises from the malignant transformation of mel
 
 <h2> Results </h2>
 The results obtained were almost indistinguishable to the eye. The WGAN learned how to represent the malignant images accurately and are depicted in the images below. Looking at the learning process shows how the generator learned to capture the essence of the malignant images. The project was also done under severe data constraints - only ~500 images were used to train the GAN and with limited GPUs.
-![image](https://github.com/user-attachments/assets/29a298f1-9ff3-4353-9c18-c1681a5fd6ff)
+![alt-text](wgan-image.png)
 
 
 
