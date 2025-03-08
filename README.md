@@ -21,5 +21,4 @@ References:
 4.	Q’Andre Small, Avimanyou Vatsa, Tyler Jan, Ava Miller, and Ayushi Kumar, “Unsupervised GAN for Melanoma,” IEEE Integrated STEM Education Conference (ISEC 2022), Princeton, NJ, USA, DOI: 10.1109/ISEC54952.2022.10025272. 
 5.	Ava Miller, Tyler Jan, Q’Andre Small, Ayushi Kumar, and Avimanyou Vatsa, “GAN Assistance in Diagnosis of Melanoma,” IEEE Integrated STEM Education Conference (ISEC 2022), Princeton, NJ, USA, DOI: 10.1109/ISEC54952.2022.10025328. 
 6.	Tyler Jan, Ava Miller, Q’Andre Small, Ayushi Kumar, Avimanyou Vatsa, “Effect of Cycle GAN in Melanoma Classification,” Integrated STEM Education Conference (ISEC 2022), Princeton, NJ, USA, DOI: 10.1109/ISEC54952.2022.10025273.
-![image](https://github.com/user-attachments/assets/5f8f8550-59aa-4736-91a9-1258c74e78f1)
 
