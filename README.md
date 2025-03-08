@@ -5,8 +5,12 @@ Melanoma, a form of skin cancer, arises from the malignant transformation of mel
 <p style="font-size: 15px;"> A Wasserstein Generative Adversarial Network (WGAN) is an advanced type of Generative Adversarial Network (GAN) designed to improve the stability and effectiveness of training GANs. Traditional GANs often suffer from issues like mode collapse, vanishing gradients, and unstable training dynamics, which make them challenging to train. WGAN addresses these issues by using the Earth Mover's (EM) distance, also known as the Wasserstein distance, as the loss function instead of the Jensen-Shannon divergence used in standard GANs. </p>
 
 <h2> Results </h2>
-The results obtained were almost indistinguishable to the eye. The WGAN learned how to represent the malignant images accurately and are depicted in the images below. Looking at the learning process shows how the generator learned to capture the essence of the malignant images. The project was also done under severe data constraints - only ~500 images were used to train the GAN and with limited GPUs.
-![alt-text](wgan-image.png)
+The results obtained were almost indistinguishable to the eye. The WGAN learned how to represent the malignant images accurately and are depicted in the images below. Looking at the learning process shows how the generator learned to capture the essence of the malignant images. The project was conducted under significant data constraints, utilizing only around 500 images to train the GAN while operating with limited GPU resources.
+<br>
+<br>
+
+![Alt text](wgan-image.png)
+
 
 
 
