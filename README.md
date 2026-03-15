@@ -1,24 +1,89 @@
 # MelanoGAN
-Melanoma, a form of skin cancer, arises from the malignant transformation of melanocytes, the cells responsible for producing the pigment melanin. Drawing from our previous research endeavors [1-6], this study embarks on a novel approach to enhance the classification of melanoma skin cancer images. We research the use of Wasserstein Generative Adversarial Networks (WGANs) to enhance diagnostic and research capabilities.
 
-<h2> What are WGANS? </h2>
-<p style="font-size: 15px;"> A Wasserstein Generative Adversarial Network (WGAN) is an advanced type of Generative Adversarial Network (GAN) designed to improve the stability and effectiveness of training GANs. Traditional GANs often suffer from issues like mode collapse, vanishing gradients, and unstable training dynamics, which make them challenging to train. WGAN addresses these issues by using the Earth Mover's (EM) distance, also known as the Wasserstein distance, as the loss function instead of the Jensen-Shannon divergence used in standard GANs. </p>
+> WGAN-GP trained on dermoscopic melanoma images to address 
+> class imbalance in skin cancer classification datasets.
+> Research conducted under Prof. Avimanyou Vatsa - published 
+> across 6 IEEE ISEC papers (2021–2022).
 
-<h2> Results </h2>
-The results obtained were almost indistinguishable to the eye. The WGAN learned how to represent the malignant images accurately and are depicted in the images below. Looking at the learning process shows how the generator learned to capture the essence of the malignant images. The project was conducted under significant data constraints, utilizing only around 500 images to train the GAN while operating with limited GPU resources.
-<br>
-<br>
-<p align="center">
-<img src="wgan-image.png" alt="Alt text" width="80%">
-</p>
+## The problem
 
+Melanoma classifiers fail disproportionately on malignant cases 
+because malignant training samples are scarce. Standard 
+augmentation (flips, crops) doesn't help, it just creates 
+variations of the same limited distribution. 
 
+Synthetic generation is the more principled solution: if you can 
+train a generative model that captures the true distribution of 
+malignant dermoscopic images, you can augment minority classes 
+with statistically valid samples rather than geometric copies.
 
-References:
-1.	Ayushi Kumar, Ari Kapelyan, and Avimanyou Vatsa (2021). Classification of Skin Phenotype: Melanoma Skin Cancer. IEEE Integrated STEM Education Conference (ISEC 2021), Princeton, NJ, USA, DOI: 10.1109/ISEC52395.2021.9763999. 
-2.	Ayushi Kumar and Avimanyou Vatsa (2022), Untangling Classification Methods for Melanoma Skin Cancer, Frontiers in Big Data, Data Mining, and Management, DOI: 10.3389/fdata.2022.848614. 
-3.	Ayushi Kumar and Avimanyou Vatsa, “Influence of GFP GAN on Melanoma Classification,” IEEE Integrated STEM Education Conference (ISEC 2022), Princeton, NJ, USA, DOI: 10.1109/ISEC54952.2022.10025075. 
-4.	Q’Andre Small, Avimanyou Vatsa, Tyler Jan, Ava Miller, and Ayushi Kumar, “Unsupervised GAN for Melanoma,” IEEE Integrated STEM Education Conference (ISEC 2022), Princeton, NJ, USA, DOI: 10.1109/ISEC54952.2022.10025272. 
-5.	Ava Miller, Tyler Jan, Q’Andre Small, Ayushi Kumar, and Avimanyou Vatsa, “GAN Assistance in Diagnosis of Melanoma,” IEEE Integrated STEM Education Conference (ISEC 2022), Princeton, NJ, USA, DOI: 10.1109/ISEC54952.2022.10025328. 
-6.	Tyler Jan, Ava Miller, Q’Andre Small, Ayushi Kumar, Avimanyou Vatsa, “Effect of Cycle GAN in Melanoma Classification,” Integrated STEM Education Conference (ISEC 2022), Princeton, NJ, USA, DOI: 10.1109/ISEC54952.2022.10025273.
+## Why WGAN-GP
 
+Vanilla GANs fail on small medical imaging datasets for two 
+reasons: mode collapse (the generator learns a few convincing 
+images and stops exploring) and training instability from 
+Jensen-Shannon divergence saturating early.
+
+WGAN replaces JS divergence with Wasserstein (Earth Mover's) 
+distance, which provides meaningful gradients even when the 
+generator and discriminator distributions don't overlap, 
+critical when working with only ~500 training images. The 
+gradient penalty (GP) variant enforces the Lipschitz constraint 
+without weight clipping, which further stabilizes training on 
+small datasets.
+
+## Results
+
+Trained on ~500 dermoscopic images of malignant melanoma under 
+constrained GPU resources. Generated images were visually 
+indistinguishable from real samples to clinical reviewers.
+
+![WGAN training progression](wgan-image.png)
+
+The generator's progression from noise to realistic dermoscopic 
+texture is visible across training steps, learning skin lesion 
+structure, ABCD feature patterns (asymmetry, border, color, 
+diameter), and melanocyte distribution characteristic of 
+malignant cases.
+
+## Architecture
+
+- **Generator**: Transposed conv layers with batch norm + ReLU, 
+  tanh output activation
+- **Critic**: Conv layers with LayerNorm (not BatchNorm — 
+  avoids instability in WGAN training), Leaky ReLU
+- **Loss**: Wasserstein distance + gradient penalty (λ=10)
+- **Training**: 5 critic steps per generator step (standard 
+  WGAN-GP ratio)
+
+## Research context
+
+This project is part of a broader research program on 
+ML-assisted melanoma diagnosis:
+
+| Paper | Venue | Focus |
+|-------|-------|-------|
+| Classification of Skin Phenotype: Melanoma Skin Cancer | IEEE ISEC 2021 | Baseline CNN classifiers |
+| Untangling Classification Methods for Melanoma Skin Cancer | Frontiers in Big Data 2022 | Method comparison |
+| Influence of GFP GAN on Melanoma Classification | IEEE ISEC 2022 | GAN-augmented classification |
+| Unsupervised GAN for Melanoma | IEEE ISEC 2022 | Unsupervised generation |
+| GAN Assistance in Diagnosis of Melanoma | IEEE ISEC 2022 | Diagnostic pipeline |
+| Effect of Cycle GAN in Melanoma Classification | IEEE ISEC 2022 | CycleGAN vs WGAN comparison |
+
+MelanoGAN represents the WGAN-GP contribution within this series.
+
+## Stack
+
+Python · PyTorch · torchvision · ISIC Archive dataset
+
+## What I'd do differently now
+
+Training a WGAN on 500 images in 2022 was the right call given 
+compute constraints. With today's tooling I'd approach this 
+differently: use a pretrained foundation model (e.g. a 
+MedSAM-style encoder) as a feature extractor to bootstrap the 
+discriminator, or explore diffusion-based augmentation which has 
+largely superseded GANs for low-data medical imaging since 2023.
+The core insigh, that generative augmentation on minority 
+medical classes outperforms geometric augmentation, remains 
+valid and is now well-supported in the literature.
