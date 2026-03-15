@@ -34,17 +34,25 @@ small datasets.
 
 ## Results
 
-Trained on ~500 dermoscopic images of malignant melanoma under 
-constrained GPU resources. Generated images were visually 
-indistinguishable from real samples to clinical reviewers.
+| Metric | Raw dataset | WGAN-augmented | Improvement |
+|--------|-------------|----------------|-------------|
+| F1 Score | 0.193 | 0.888 | +360% |
+| Recall | 0.501 | 0.914 | +82% |
+| ROC-AUC | 0.884 | 0.989 | +12% |
+| Accuracy | 0.896 | 0.976 | +9% |
+| Loss | 0.2407 | 0.0822 | -66% |
+
+WGAN-based augmentation nearly doubled recall — the most 
+clinically critical metric for cancer detection, where false 
+negatives carry direct patient risk. The F1 improvement from 
+0.19 to 0.89 reflects how severely class imbalance was 
+suppressing minority-class performance on the raw dataset, 
+and how effectively synthetic generation corrected it.
+
+All results on held-out test set. Trained on ~500 dermoscopic 
+images from the ISIC Archive under constrained GPU resources.
 
 ![WGAN training progression](wgan-image.png)
-
-The generator's progression from noise to realistic dermoscopic 
-texture is visible across training steps, learning skin lesion 
-structure, ABCD feature patterns (asymmetry, border, color, 
-diameter), and melanocyte distribution characteristic of 
-malignant cases.
 
 ## Architecture
 
